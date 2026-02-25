@@ -276,6 +276,23 @@ export class FlyoutElement extends LitElement {
     `;
   }
 
+  renderReference() {
+    const referenceVersion = this.config.versions.active.find(
+      (version) => version.slug === "reference",
+    );
+
+    if (!referenceVersion) {
+      return nothing;
+    }
+
+    return html`
+      <dl class="reference">
+        <dt>Reference</dt>
+        <dd><a href="${referenceVersion.urls.documentation}">Reference & Release Notes</a></dd>
+      </dl>
+    `;
+  }
+
   renderVersions() {
     if (
       !this.config.versions.active.length ||
@@ -285,11 +302,17 @@ export class FlyoutElement extends LitElement {
       return nothing;
     }
 
+    const versionPattern = /^v\d+\.\d+/;
+    const filteredVersions = this.config.versions.active.filter(
+      (version) => versionPattern.test(version.slug),
+    );
+
+    if (!filteredVersions.length) {
+      return nothing;
+    }
+
     const getVersionLink = (version) => {
-      const url = getLinkWithFilename(
-        version.urls.documentation,
-        this.config.readthedocs.resolver.filename,
-      );
+      const url = version.urls.documentation;
       const link = html`<a href="${url}">${version.slug}</a>`;
       return this.config.versions.current.slug == version.slug
         ? html`<strong>${link}</strong>`
@@ -299,7 +322,7 @@ export class FlyoutElement extends LitElement {
     return html`
       <dl class="versions">
         <dt>Versions</dt>
-        ${this.config.versions.active.map(
+        ${filteredVersions.map(
           (version) => html`<dd>${getVersionLink(version)}</dd>`,
         )}
       </dl>
@@ -359,7 +382,7 @@ export class FlyoutElement extends LitElement {
         ${this.renderHeader()}
         <main class=${classMap({ closed: !this.opened })}>
           ${this.renderLanguages()} ${this.renderVersions()}
-          ${this.renderDownloads()} ${this.renderReadTheDocs()}
+          ${this.renderDownloads()} ${this.renderReference()}
           ${this.renderVCS()} ${this.renderSearch()}
           <hr />
           ${this.renderFooter()}
