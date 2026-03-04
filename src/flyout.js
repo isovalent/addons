@@ -134,25 +134,14 @@ export class FlyoutElement extends LitElement {
     return html`
       <small>
         <span>
-          <a
-            href="${addUtmParameters(
-              "https://docs.readthedocs.io/page/addons.html",
-              "flyout",
-            )}"
-            >Addons documentation</a
-          ></span
-        >
-        <span> ― </span>
-        <span
-          >Hosted by
-          <a
-            href="${addUtmParameters(
-              "https://about.readthedocs.com/",
-              "flyout",
-            )}"
-            >Read the Docs</a
-          ></span
-        >
+          Hosted by
+          <a href="https://isovalent.com">
+            Isovalent
+          </a>( now part of
+          <a href="https://cisco.com">
+            cisco
+          </a>)
+        </span>
       </small>
     `;
   }
@@ -287,7 +276,6 @@ export class FlyoutElement extends LitElement {
 
     return html`
       <dl class="reference">
-        <dt>Reference</dt>
         <dd><a href="${referenceVersion.urls.documentation}">Reference & Release Notes</a></dd>
       </dl>
     `;
@@ -302,7 +290,7 @@ export class FlyoutElement extends LitElement {
       return nothing;
     }
 
-    const versionPattern = /^v\d+\.\d+/;
+    const versionPattern = /^v\d+\.\d+|^latest/;
     const filteredVersions = this.config.versions.active.filter(
       (version) => versionPattern.test(version.slug),
     );
