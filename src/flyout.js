@@ -300,10 +300,13 @@ export class FlyoutElement extends LitElement {
     }
 
     const getVersionLink = (version) => {
-      const url = getLinkWithFilename(
-       version.urls.documentation,
-       "documentation.html",
-      );
+      const url =
+        version.slug === "reference"
+          ? version.urls.documentation
+          : getLinkWithFilename(
+              version.urls.documentation,
+              "documentation.html",
+            );
       const link = html`<a href="${url}">${version.slug}</a>`;
       return this.config.versions.current.slug == version.slug
         ? html`<strong>${link}</strong>`
