@@ -369,6 +369,19 @@ export class FlyoutElement extends LitElement {
       return nothing;
     }
 
+    // Check if there are any versions or translations to display
+    const versionPattern = /^v\d+\.\d+|^latest/;
+    const hasVersions = this.config.versions.active.filter(
+      (version) => versionPattern.test(version.slug),
+    ).length > 0;
+
+    const hasTranslations = this.config.projects.translations.length > 0;
+
+    // If no versions and no translations, don't render flyout menu
+    if (!hasVersions && !hasTranslations) {
+      return nothing;
+    }
+
     this.updateCSSClasses();
 
     return html`
